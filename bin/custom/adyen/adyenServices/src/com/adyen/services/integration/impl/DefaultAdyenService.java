@@ -40,6 +40,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -437,11 +438,12 @@ public class DefaultAdyenService implements AdyenService
 	public String calculateHMAC(final String hmacKey, final String signingString)
 	{
 		LOG.info("HMAC Source String : " + signingString);
-		final SecretKeySpec keySpec = new SecretKeySpec(hmacKey.getBytes(), "HmacSHA1");
+		byte[] rawKey = Hex.decodeHex(hmacKey.toCharArray());
+		final SecretKeySpec keySpec = new SecretKeySpec(rawKey, "HmacSHA256");
 		Mac mac;
 		try
 		{
-			mac = Mac.getInstance("HmacSHA1");
+			mac = Mac.getInstance("HmacSHA256");
 			mac.init(keySpec);
 
 			final byte[] result = mac.doFinal(signingString.getBytes("UTF-8"));
