@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -8,7 +9,7 @@
 	<body onload="document.getElementById('hppForm').submit();">
 		<form method="POST" action="${hppUrl}" id="hppForm">
 			<c:forEach items="${hppFormData}" var="entry">
-				<input type="hidden" name="${entry.key}" value="${entry.value}" />
+				<input type="hidden" name="${entry.key}" value="${fn:escapeXml(entry.value)}" />
 			</c:forEach>
 			<noscript>
 				<br>
